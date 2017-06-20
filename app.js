@@ -3,18 +3,25 @@
 var express = require('express');
 var server = express();
 var bodyParser = require('body-parser');
-
-// var session = require('express-session')
 const functions = require('firebase-functions');
 var fireAdmin = require("firebase-admin");
-var user = fireAdmin.auth().currentUser; // todo: currentUser
+var user = fireAdmin.auth().currentUser; // todo: find currentUser for fire admin
 var db = fireAdmin.database();
 var ref = db.ref("/");
+var firebase = new Firebase('https://zimpia-web-api.firebaseio.com/');
 ref.once("value", function(snapshot) {
     console.log(snapshot.val());
 });
 
+            /*CONTROLLER SPECIFIC MIDDLEWARE AUTH*/
+            var documents = require('controllers/document');
+            const routes = (router, authenticate) => {
+            // Get all documents
+            router.get('documents/', authenticate.isAthenticated, documents.getAll);
+            }
+            module.exports routes;
 
+// var session = require('express-session')
 
 // CONFIGURE EXPRESS SERVER
 server.configure(function(){
@@ -23,17 +30,15 @@ server.configure(function(){
     server.use(server.router);
     server.set('view engine', 'ejs');
 
-
-
 /*LIVE TESTING HTTP */
 server.listen(port, function () {
-    console.log("Listening at Port ", port);
+    console.log('Listening at Port ' + port);
 });
 
 
 
 /*
-CUSTOM MIDDLEWARE
+TODO CUSTOM MIDDLEWARE for FIREBASE
 */
 
 function userAuth(req, res, next){
@@ -44,8 +49,6 @@ var fuser = {
     req.fuser = fuser;
     next()
 }
-
-
 
 
 });
@@ -120,28 +123,51 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
         });
     });
 
-/*
-CREATE AUTH TOKEN
-*/
-var uid = "some-uid"; // dummy uid
-admin.auth().createCustomToken(uid)
-    .then(function(customToken) {
-        // Send token back to client
-    })
-    .catch(function(error) {
-        console.log("Error creating custom token:", error);
-    });
 
 
 
-/*
-CURRENT USER OPTION #3*/
 
-if (user) {
-    // User is signed in.
-} else {
-    // No user is signed in.
-}
+
+
+
+
+
+        /*
+        CREATE AUTH TOKEN
+        */
+        var uid = "some-uid"; // dummy uid
+
+        admin.auth().createCustomToken(uid)
+            .then(function(customToken) {
+                // Send token back to client
+            })
+            .catch(function(error) {
+                console.log("Error creating custom token:", error);
+            });
+
+
+
+        /*
+        CURRENT USER OPTION #3*/
+
+        if (user) {
+            // User is signed in.
+        } else {
+            // No user is signed in.
+        }
+
+
+        /*DECODE TOKEN*/
+
+         fireAdmin.auth().verifyIdToken(idToken)
+         .then(function(decodedToken) {
+         var uid = decodedToken.uid;
+         // ...
+         }).catch(function(error) {
+         // Handle error
+         });
+
+
 
 /*NEXT CALLBACK FUNCTION */
 
@@ -181,7 +207,7 @@ if (user) {
 
 
 
-    /*POST SIGN-IN USING EMAIL AND PASSWORD*/
+    /*TODO POST SIGN-IN USING EMAIL AND PASSWORD*/
     fireAdmin.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
@@ -199,14 +225,13 @@ if (user) {
 
 
 
-/*AUTH WEB*/
+/*AUTH WEB FOR SPA */
 
 
-    var name, email, photoUrl, uid, emailVerified;
+    var name, email, uid, emailVerified;
     if (user != null) {
         name = user.displayName;
         email = user.email;
-        photoUrl = user.photoURL;
         emailVerified = user.emailVerified;
         uid = user.uid;  // The user's ID, unique to the Firebase project. Do NOT use
                          // this value to authenticate with your backend server, if
@@ -219,8 +244,7 @@ if (user) {
         console.log("  Provider-specific UID: "+profile.uid);
         console.log("  Name: "+profile.displayName);
         console.log("  Email: "+profile.email);
-        console.log("  Photo URL: "+profile.photoURL);
-    });
+        });
     }
 
 
@@ -311,16 +335,6 @@ if (user) {
         })
 
 
-
-/*DECODE TOKEN*/
-/*
-fireAdmin.auth().verifyIdToken(idToken)
-    .then(function(decodedToken) {
-      var uid = decodedToken.uid;
-      // ...
-    }).catch(function(error) {
-  // Handle error
-});
 
 
 
