@@ -1,0 +1,35 @@
+{
+  "name": "apizimpia",
+  "version": "1.0.0",
+  "description": "zimpia customer rest",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "zimpia",
+    "australia",
+    "customer",
+    "business",
+    "mobile",
+    "android",
+    "ios"
+  ],
+  "author": "Ray Evangelista",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "body-parser": "^1.17.2",
+    "connect-session-firebase": "^4.2.0",
+    "ejs": "^2.5.6",
+    "express": "^4.15.3",
+    "express-ejs-layouts": "^2.3.0",
+    "express-jsonschema": "^1.1.6",
+    "express-session": "^1.15.3",
+    "firebase-admin": "^5.0.0",
+    "firebase-client": "^0.1.1",
+    "firebase-functions": "^0.5.7",
+    "routerjs": "^1.0.10"
+  }
+}
