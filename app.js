@@ -3,7 +3,6 @@
 var dotenv = require('dotenv');
 dotenv.load();
 var express = require('express');
-var port = 5000;
 var server = express();
 var bodyParser = require('body-parser');
 const functions = require('firebase-functions');
@@ -19,9 +18,10 @@ server.set('view engine', 'ejs');
 
 
 /*LIVE TESTING HTTP */
-server.listen(port, function(){
-    console.log('listening at port '+ port);
-});
+
+server.listen(process.env.PORT || 5000);
+    // console.log('listening at port '+ port);
+
 
 if (process.env.NODE_ENV !== 'production') {
 require('dotenv').config()
