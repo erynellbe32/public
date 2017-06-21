@@ -118,8 +118,13 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
     });
 
 
+    
+    // user watcher
+    // object null
 
-  /*  TODO Firebase Admin */
+  /*  TODO PRIORITY ONE Firebase Admin
+  CORRECT VARIABLES AND PARSEURL
+   */
 
 
         admin.auth().createUser({
