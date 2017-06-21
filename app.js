@@ -1,6 +1,7 @@
 'use strict';
 /*EXPRESS & BODY PARSER INITIALIZE DEPENDENCIES*/
 var express = require('express');
+var port = 5000;
 var server = express();
 var bodyParser = require('body-parser');
 const functions = require('firebase-functions');
@@ -15,8 +16,8 @@ var admin = require("firebase-admin");
 // server.set('view engine', 'ejs');
 
 /*LIVE TESTING HTTP */
-server.listen(3000, function(){
-    console.log('listening at port 3000');
+server.listen(port, function(){
+    console.log('listening at port '+ port);
 });
 
 
