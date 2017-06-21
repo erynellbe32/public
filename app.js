@@ -118,7 +118,7 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
     });
 
 
-    
+
     // user watcher
     // object null
 
@@ -126,6 +126,13 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
   CORRECT VARIABLES AND PARSEURL
    */
 
+
+
+
+    server.post('/api/user/', urlencodedParser, function (req, res, next) {
+
+
+    }
 
         admin.auth().createUser({
             email: "user@example.com",
@@ -183,6 +190,63 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
         .catch(function(error) {
             console.log("Error updating user:", error);
         });
+
+
+
+    /*database*/
+
+    var usersRef = ref.child("users");
+    usersRef.set({
+        alanisawesome: {
+            date_of_birth: "June 23, 1912",
+            full_name: "Alan Turing"
+        },
+        gracehop: {
+            date_of_birth: "December 9, 1906",
+            full_name: "Grace Hopper"
+        }
+    });
+
+
+
+    var hopperRef = usersRef.child("gracehop");
+    hopperRef.update({
+        "nickname": "Amazing Grace"
+    });
+
+
+    var postsRef = ref.child("posts");
+
+    var newPostRef = postsRef.push();
+    newPostRef.set({
+        author: "gracehop",
+        title: "Announcing COBOL, a New Programming Language"
+    });
+
+// we can also chain the two calls together
+    postsRef.push().set({
+        author: "alanisawesome",
+        title: "The Turing Machine"
+    });
+
+
+// Attach an asynchronous callback to read the data at our posts reference
+    ref.on("value", function(snapshot) {
+        console.log(snapshot.val());
+    }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+    });
+
+
+
+
+
+
+
+
+
+
+
 
 
         /*
