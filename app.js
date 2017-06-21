@@ -4,24 +4,19 @@ var express = require('express');
 var server = express();
 var bodyParser = require('body-parser');
 const functions = require('firebase-functions');
-var firebase = require("firebase");
 var admin = require("firebase-admin");
-var user = admin.auth().currentUser;
-var db = admin.database();
-var ref = db.ref("/customer");
 
 // var session = require('express-session')
 
 // CONFIGURE EXPRESS SERVER
-server.configure(function(){
-    server.set('port', process.env.PORT || 3000);
-    server.set(views, __dirname + '/views');
-    server.use(server.router);
-    server.set('view engine', 'ejs');
+// server.configure(function () {
+//     server.set(views,__dirname + '/views');
+//     server.use(server.router);
+// server.set('view engine', 'ejs');
 
 /*LIVE TESTING HTTP */
-server.listen(port, function () {
-    console.log('Listening at Port ' + port);
+server.listen(3000, function(){
+    console.log('listening at port 3000');
 });
 
 
@@ -29,9 +24,9 @@ server.listen(port, function () {
 /*APP USE & SET STATIC FILES*/
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(bodyParser.json());
-server.use(session({secret:'thisisitpancit',saveUninitialized:true,resave:true}));
-server.use(express.static(__dirname + '/assets'));
-server.use(currentUser);
+// server.use(session({secret:'thisisitpancit',saveUninitialized:true,resave:true}));
+// server.use(express.static(__dirname + '/assets'));
+// server.use(currentUser);
 
 
 
@@ -55,6 +50,12 @@ admin.initializeApp({
 });
 
 
+var db = admin.database();
+var ref = db.ref("/");
+ref.once("value", function(snapshot) {
+    console.log(snapshot.val());
+});
+// var user = admin.auth().currentUser;
 
 /*END POINT PANCIT TEST*/
 server.get('/pancit', function(req, res) {
@@ -64,13 +65,5 @@ server.get('/pancit', function(req, res) {
 
 /*END POINTS STARTER APP SITE*/
 server.get('/', function(req, res) {
-  res.render('index.ejs');
+  res.render('index.html');
 });
-server.get('/register', function(req, res) {
-    res.render('signup.ejs');
-});
-
-
-
-
-
