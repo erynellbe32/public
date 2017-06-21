@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "production": "NODE_ENV=production"
   },
   "keywords": [
     "zimpia",
@@ -22,6 +23,7 @@
     "babel": "^6.23.0",
     "body-parser": "^1.17.2",
     "connect-session-firebase": "^4.2.0",
+    "dotenv": "^4.0.0",
     "ejs": "^2.5.6",
     "express": "^4.15.3",
     "express-ejs-layouts": "^2.3.0",
@@ -34,5 +36,5 @@
   },
   "engines": {
     "node": "8.0.0"
-}
+  }
 }

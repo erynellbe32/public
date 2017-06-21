@@ -1,11 +1,14 @@
 'use strict';
 /*EXPRESS & BODY PARSER INITIALIZE DEPENDENCIES*/
+var dotenv = require('dotenv');
+dotenv.load();
 var express = require('express');
 var port = 5000;
 var server = express();
 var bodyParser = require('body-parser');
 const functions = require('firebase-functions');
 var admin = require("firebase-admin");
+server.set('view engine', 'ejs');
 
 // var session = require('express-session')
 
@@ -13,14 +16,16 @@ var admin = require("firebase-admin");
 // server.configure(function () {
 //     server.set(views,__dirname + '/views');
 //     server.use(server.router);
-// server.set('view engine', 'ejs');
+
 
 /*LIVE TESTING HTTP */
 server.listen(port, function(){
     console.log('listening at port '+ port);
 });
 
-
+if (process.env.NODE_ENV !== 'production') {
+require('dotenv').config()
+};
 
 /*APP USE & SET STATIC FILES*/
 server.use(bodyParser.urlencoded({ extended: false }));
@@ -66,5 +71,5 @@ server.get('/pancit', function(req, res) {
 
 /*END POINTS STARTER APP SITE*/
 server.get('/', function(req, res) {
-  res.render('index.html');
+  res.render('index.ejs');
 });
