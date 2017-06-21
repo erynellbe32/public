@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+
+  	<script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
+	<script>
+	  // Initialize Firebase
+	  var config = {
+		apiKey: "AIzaSyDpVzqJK57mBYl8fPwgMSgiXFqA-H7Okkw",
+		authDomain: "zimpia-web-api.firebaseapp.com",
+		databaseURL: "https://zimpia-web-api.firebaseio.com",
+		projectId: "zimpia-web-api",
+		storageBucket: "zimpia-web-api.appspot.com",
+		messagingSenderId: "273550342416"
+	  };
+	  firebase.initializeApp(config);
+	</script>
+	<% include ../partials/head %>
+</head>
+<body class="container">
+
+	<header>
+		<% include ../partials/header %>
+	</header>
+
+	<main>
+		<div class="jumbotron">
+			<h1>YOU ARE AWESOME!!!</h1>
+			<p>Welcome to Zimpia Web API</p>
+		</div>
+	</main>
+
+	<footer>
+		<% include ../partials/footer %>
+	</footer>
+	
+</body>
+</html>
