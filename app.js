@@ -4,11 +4,19 @@ var express = require('express');
 var server = express();
 var bodyParser = require('body-parser');
 const functions = require('firebase-functions');
-var fireAdmin = require("firebase-admin");
-var user = fireAdmin.auth().currentUser; // todo: find currentUser for fire admin
-var db = fireAdmin.database();
+var firebase = require("firebase");
+var admin = require("firebase-admin");
+var user = firebase.auth().currentUser; // todo: find currentUser for fire admin
+var db = firebase.database();
 var ref = db.ref("/");
-var firebase = new Firebase('https://zimpia-web-api.firebaseio.com/');
+var app = firebase.initializeApp({
+    apiKey: '<your-api-key>',
+    authDomain: '<your-auth-domain>',
+    databaseURL: '<your-database-url>',
+    storageBucket: '<your-storage-bucket>',
+    messagingSenderId: '<your-sender-id>'
+}
+});
 ref.once("value", function(snapshot) {
     console.log(snapshot.val());
 });
@@ -65,8 +73,8 @@ server.use(currentUser);
 
 
 /*FIREBASE ADMIN SDK INITIALIZE*/
-fireAdmin.initializeApp({
-  credential: fireAdmin.credential.cert({
+admin.initializeApp({
+  credential: admin.credential.cert({
     type: "service_account",
     project_id: "zimpia-web-api",
     private_key_id: "4c57067821a00f0f4aaf8e6986766350bdea1b85",
@@ -115,7 +123,7 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
         res.json(req.body);
         next(); // send data
 // how to catch data
-        fireAdmin.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -159,7 +167,7 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
 
         /*DECODE TOKEN*/
 
-         fireAdmin.auth().verifyIdToken(idToken)
+         admin.auth().verifyIdToken(idToken)
          .then(function(decodedToken) {
          var uid = decodedToken.uid;
          // ...
@@ -208,7 +216,7 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
 
 
     /*TODO POST SIGN-IN USING EMAIL AND PASSWORD*/
-    fireAdmin.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
@@ -216,7 +224,7 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
     });
 
     /*GET SIGN-OUT USER*/
-    fireAdmin.auth().signOut().then(function() {
+    firebase.auth().signOut().then(function() {
         // Sign-out successful.
     }).catch(function(error) {
         // An error happened.
@@ -269,7 +277,7 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
 
 
     /*EMAIL VERIFICATION*/
-    var user = fireAdmin.auth().currentUser;
+    var user = firebase.auth().currentUser;
 
     user.sendEmailVerification().then(function() {
         // Email sent.
@@ -328,7 +336,7 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
     /*Register and Writes the user's data to the database.*/
     // [START basic_write]
     function writeUserData(userId, name, email, ) {
-        fireAdmin.database().ref('users/' + userId).set({
+        firebase.database().ref('users/' + userId).set({
             username: name,
             email: email,
             }
@@ -346,7 +354,7 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
 
 
     server.get('api/user/login', function(req, res) {
-      fireAdmin.auth().getUserByEmail(email)
+      firebase.auth().getUserByEmail(email)
           .then(function(userRecord) {
             // See the UserRecord reference doc for the contents of userRecord.
             console.log("Successfully fetched user data:", userRecord.toJSON());
@@ -364,7 +372,7 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
 
         })
         .post(function (req, res) {
-          fireAdmin.auth().createUser({
+          firebase.auth().createUser({
                 email: "user@example.com",
                 emailVerified: false,
                 password: "secretPassword",
@@ -383,7 +391,7 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
 
         })
         .put(function (req, res) {
-          fireAdmin.auth().updateUser(uid, {
+          firebase.auth().updateUser(uid, {
                 email: "modifiedUser@example.com",
                 emailVerified: true,
                 password: "newPassword",
@@ -411,7 +419,7 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
 
     // Basic write operations
     function writeUserData(userId, name, email, imageUrl) {
-        fireAdmin.database().ref('users/' + userId).set({
+        firebase.database().ref('users/' + userId).set({
             username: name,
             email: email,
             profile_picture : imageUrl
@@ -420,8 +428,8 @@ server.post('/api/user/:email/:password/', urlencodedParser, function (req, res,
 
 
     // READ DATA ONCE
-    var userId = fireAdmin.auth().currentUser.uid;
-    return fireAdmin.database().ref('/users/' + userId).once('value').then(function(snapshot) {
+    var userId = firebase.auth().currentUser.uid;
+    return firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
         var username = snapshot.val().username;
         // ...
     });
