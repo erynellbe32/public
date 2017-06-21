@@ -1,0 +1,14 @@
+{
+  "name": "Zimpia API web",
+  "description": "This app does one little thing, and does it well.",
+  "website": "https://zimpia.coma.au/",
+  "keywords": [
+    "productivity",
+    "mobile",
+    "australia"
+  ],
+  "SETUP_BY": {
+    "description": "Who initiated this setup",
+    "value": ""
+  }
+}
