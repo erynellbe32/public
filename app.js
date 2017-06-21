@@ -25,14 +25,6 @@ ref.once("value", function(snapshot) {
     console.log(snapshot.val());
 });
 
-            /*CONTROLLER SPECIFIC MIDDLEWARE AUTH*/
-            var documents = require('controllers/document');
-            const routes = (router, authenticate) => {
-            // Get all documents
-            router.get('documents/', authenticate.isAthenticated, documents.getAll);
-            }
-            module.exports routes;
-
 // var session = require('express-session')
 
 // CONFIGURE EXPRESS SERVER
@@ -47,23 +39,6 @@ server.listen(port, function () {
     console.log('Listening at Port ' + port);
 });
 
-
-
-/*
-TODO CUSTOM MIDDLEWARE for FIREBASE
-*/
-
-function userAuth(req, res, next){
-var fuser = {
-    email: 'Kevin',
-    admin: true
-    };
-    req.fuser = fuser;
-    next()
-}
-
-
-});
 
 
 /*APP USE & SET STATIC FILES*/
@@ -110,6 +85,13 @@ server.get('/register', function(req, res) {
     res.render('signup.ejs');
 });
 
+
+
+
+
+
+
+    
 /*registerPOST CREATE NEW USER WITH EMAIL AND PASSWORD with ROUTE PARAMS and with Mongo DB, convert to Firebase */
 server.post('/api/user/:email/:password/', urlencodedParser, function (req, res, next) {
     var newUser = new User(); // todo experiment on user
