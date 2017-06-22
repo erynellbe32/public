@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var router = express.Router();
 var admin = require("firebase-admin");
 
+
 var serviceAccount = require("./../assets/config.json");
 
 admin.initializeApp({
@@ -17,15 +18,8 @@ router.use(bodyParser.json());
 
 
 
-/*
-FOR DATABASE PROVISIONING
-*/
 
-var db = admin.database();
-var ref = db.ref("/"); // check firebas rules for special priviledge
-ref.once("value", function(snapshot) {
-    console.log(snapshot.val());
-});
+
 
 
 
@@ -43,9 +37,47 @@ if (user != null) {
     // No user is signed in.
 }
 
+/*GET USER BY UID*/
+
+admin.auth().getUser(uid)
+    .then(function(userRecord) {
+        // See the UserRecord reference doc for the contents of userRecord.
+        console.log("Successfully fetched user data:", userRecord.toJSON());
+    })
+    .catch(function(error) {
+        console.log("Error fetching user data:", error);
+    });
+
+
+
+
+
+/*CUSTOM TOKEN GENERATOR*/
+
+firebase.auth().currentUser.getToken(/* forceRefresh */ true).then(function(idToken) {
+    // Send token to your backend via HTTPS
+    // ...
+}).catch(function(error) {
+    // Handle error
+});
+
+
+
+// Verify ID tokens using the Firebase Admin SDK - idToken comes from the client app (shown above)
+
+admin.auth().verifyIdToken(idToken)
+    .then(function(decodedToken) {
+        var uid = decodedToken.uid;
+        // ...
+    }).catch(function(error) {
+    // Handle error
+});
+
 
 // TODO NExT DONE - fix email posting
 /*
+
+current user ??
 variable fix, routing param
 res send
 type??

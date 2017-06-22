@@ -9,23 +9,19 @@ server.set('view engine', 'ejs');
 /*MODULAR DEPENDENCIES*/
 var auts = require('./controllers/auts'); //athentication firebase module
 server.use('/auts', auts);
-
+var profiles = require('./controllers/profiles'); //profiles firebase module
+server.use('/profiles', profiles);
 
 /*LIVE TESTING HTTP */
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 3000;
+
 server.listen(port, function () {
   console.log('listening on port ' + port);
 });
 
-
 if (process.env.NODE_ENV !== 'production') {
 require('dotenv').config()
 };
-
-
-// server.use(session({secret:'thisisitpancit',saveUninitialized:true,resave:true}));
-// server.use(express.static(__dirname + '/assets'));
-// server.use(currentUser);
 
 
 /*END POINT PANCIT TEST*/
