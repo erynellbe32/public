@@ -18,9 +18,10 @@ server.set('view engine', 'ejs');
 
 
 /*LIVE TESTING HTTP */
-
-server.listen(process.env.PORT || 5000);
-    // console.log('listening at port '+ port);
+var port = process.env.PORT || 5000;
+server.listen(port, function () {
+  console.log('listening on port ' + port);
+});
 
 
 if (process.env.NODE_ENV !== 'production') {
@@ -57,19 +58,62 @@ admin.initializeApp({
 
 
 var db = admin.database();
-var ref = db.ref("/");
+var ref = db.ref("/"); // check firebas rules for special priviledge
 ref.once("value", function(snapshot) {
     console.log(snapshot.val());
 });
-// var user = admin.auth().currentUser;
+
 
 /*END POINT PANCIT TEST*/
 server.get('/pancit', function(req, res) {
-  res.json({notes: "This is it Pancit !"})
+  res.json({notes: "This is it Pancit !", list: "puto"})
 });
-
 
 /*END POINTS STARTER APP SITE*/
 server.get('/', function(req, res) {
   res.render('index.ejs');
 });
+server.get('/login', function(req, res) {
+  res.render('login.ejs');
+
+});
+server.get('/about', function(req, res) {
+  res.render('about.ejs');
+});
+server.get('/register', function(req, res) {
+  res.render('register.ejs');
+});
+
+
+
+// TODO USER ADMIN, check on NULL currentuser
+var user = admin.auth().currentUser;
+var name, email, uid, emailVerified;
+
+if (user != null) {
+  user.providerData.forEach(function (profile) {
+    console.log("Sign-in provider: "+profile.providerId);
+    console.log("  Provider-specific UID: "+profile.uid);
+    console.log("  Email: "+profile.email);
+  });
+} else {
+  // No user is signed in.
+}
+
+
+// TODO NExT DONE - fix email posting
+server.get('/api/login/:email', function(req, res,next) {
+  var currentUser = new user();
+  currentUser.local.email = req.params.email;
+  res.send(req.params.email); next();
+  admin.auth().getUserByEmail(email)
+    .then(function(userRecord) {
+      // See the UserRecord reference doc for the contents of userRecord.
+      console.log("Successfully fetched user data:", userRecord.toJSON());
+    })
+    .catch(function(error) {
+      console.log("Error fetching user data:", error);
+    });
+
+});
+
