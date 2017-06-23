@@ -2,6 +2,7 @@
 /*EXPRESS & BODY PARSER INITIALIZE DEPENDENCIES*/
 var dotenv = require('dotenv');
 dotenv.load();
+const http = require('http');
 var bodyParser = require('body-parser');
 var express = module.exports = require('express');
 var server = express();
