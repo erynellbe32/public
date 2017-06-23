@@ -5,7 +5,17 @@ dotenv.load();
 var bodyParser = require('body-parser');
 var express = module.exports = require('express');
 var server = express();
-var firebase = require('./controllers/zfirebase');
+var firebase = require('firebase');
+
+var config = {
+  apiKey: "AIzaSyDpVzqJK57mBYl8fPwgMSgiXFqA-H7Okkw",
+  authDomain: "zimpia-web-api.firebaseapp.com",
+  databaseURL: "https://zimpia-web-api.firebaseio.com",
+  projectId: "zimpia-web-api",
+  storageBucket: "zimpia-web-api.appspot.com",
+  messagingSenderId: "273550342416"
+};
+firebase.initializeApp(config);
 
 /*MODULAR DEPENDENCIES*/
   var authenticate = require('./controllers/authenticate'); //authenticate firebase module
@@ -53,11 +63,11 @@ server.get('/register', function(req, res) {
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var jsonParser = bodyParser.json();
 
-/*SERVER TEST PASS*/
-server.get('/api/login/:email', function(req, res) {
-    console.log("hello");
-    res.send('contact success' + req.params.email);
-});
+// /*SERVER TEST PASS*/
+// server.get('/api/login/:email', function(req, res) {
+//     console.log("hello");
+//     res.send('contact success' + req.params.email);
+// });
 
 
 // AUTH SIGN IN 

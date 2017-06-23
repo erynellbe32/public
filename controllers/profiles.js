@@ -5,8 +5,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var router = express.Router();
-var firebase = require('./zfirebase');
-var database = firebase.database();
+// var firebase = require('./zfirebase');
+// var database = firebase.database();
 
 
 

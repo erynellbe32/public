@@ -1,3 +1,4 @@
+/*
 var firebase = module.exports = require('firebase');
 // Get a reference to the database service
 
@@ -16,5 +17,5 @@ firebase.initializeApp(config);
 
 
 
-/*MODULAR EXPORTS*/
-// module.exports = firebase;
+/!*MODULAR EXPORTS*!/
+// module.exports = firebase;*/
