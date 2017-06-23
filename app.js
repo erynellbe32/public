@@ -2,18 +2,21 @@
 /*EXPRESS & BODY PARSER INITIALIZE DEPENDENCIES*/
 var dotenv = require('dotenv');
 dotenv.load();
-var express = require('express');
+var bodyParser = require('body-parser');
+var express = module.exports = require('express');
 var server = express();
-server.set('view engine', 'ejs');
+var firebase = require('./controllers/zfirebase');
 
 /*MODULAR DEPENDENCIES*/
-var auts = require('./controllers/auts'); //athentication firebase module
-server.use('/auts', auts);
-var profiles = require('./controllers/profiles'); //profiles firebase module
-server.use('/profiles', profiles);
+  var authenticate = require('./controllers/authenticate'); //authenticate firebase module
+  server.use('/authenticate', authenticate);
+  var profiles = require('./controllers/profiles'); //profiles firebase module
+  server.use('/profiles', profiles);
+
+
 
 /*LIVE TESTING HTTP */
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 5000;
 
 server.listen(port, function () {
   console.log('listening on port ' + port);
@@ -42,4 +45,26 @@ server.get('/about', function(req, res) {
 });
 server.get('/register', function(req, res) {
   res.render('register.ejs');
+});
+
+
+
+/*APP USE & SET STATIC FILES*/
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+var jsonParser = bodyParser.json();
+
+/*SERVER TEST PASS*/
+server.get('/api/login/:email', function(req, res) {
+    console.log("hello");
+    res.send('contact success' + req.params.email);
+});
+
+server.post('/api/login/', function(req, res) {
+  console.log("hi!");
+  res.send('contact success!');
+  // insert firebase auth
+
+
+
+
 });
