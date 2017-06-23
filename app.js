@@ -59,12 +59,66 @@ server.get('/api/login/:email', function(req, res) {
     res.send('contact success' + req.params.email);
 });
 
-server.post('/api/login/', function(req, res) {
-  console.log("hi!");
-  res.send('contact success!');
-  // insert firebase auth
+
+// AUTH SIGN IN 
+server.post('/api/login/', urlencodedParser, function(req, res,next) {
+  console.log("login by email");
+  next();
+    function toggleSignIn() {
+      if (firebase.auth().currentUser) {
+        // [START signout]
+        firebase.auth().signOut();
+        // [END signout]
+      } else {
+        var email = req.param.email;
+        var password = req.param.password;
+      }
+      // Sign in with email and pass.
+      // [START authwithemail]
+      firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // [START_EXCLUDE]
+        if (errorCode === 'auth/wrong-password') {
+          console.log('Wrong password.');
+        } else {
+          console.log(errorMessage);
+        }
+        console.log(error);
+        // [END_EXCLUDE]
+      });
+      // [END authwithemail]
+    }
+  res.send('SIGN-IN SUCCESS!');
+});
 
 
-
-
+/**
+ * Handles the sign up button press.
+ */
+server.post('/api/register/', urlencodedParser, function(req, res,next) {
+  console.log("register by email");
+  next();
+    function handleSignUp() {
+      var email = req.param.email;
+      var password = req.param.password;
+      // Sign in with email and pass.
+      // [START createwithemail]
+      firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // [START_EXCLUDE]
+        if (errorCode == 'auth/weak-password') {
+          alert('The password is too weak.');
+        } else {
+          alert(errorMessage);
+        }
+        console.log(error);
+        // [END_EXCLUDE]
+      });
+      // [END createwithemail]
+    }
+  res.send('REGISTER SUCCESS!');
 });
